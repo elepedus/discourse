@@ -14,6 +14,8 @@ class Mailbox < ActiveRecord::Base
       group.mailboxes.delete_all
 
       @imap.list('', '*').each do |m|
+        next if m.attr.include?(:Noselect)
+
         Mailbox.create!(group: group,
                         name: m.name,
                         sync: old_mailboxes.include?(m.name))
